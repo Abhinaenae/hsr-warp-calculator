@@ -5,11 +5,12 @@ FROM golang:1.22-alpine AS builder
 WORKDIR /app
 
 # Copy the Go module files and download the dependencies
-COPY go.mod ./
+COPY src/go.mod ./  
 RUN go mod download
 
 # Copy the source code
-COPY . .
+COPY src/ .
+COPY . .         
 
 # Build the Go application
 RUN go build -o main .
@@ -25,9 +26,9 @@ COPY --from=builder /app/main .
 # Copy the templates directory from the build stage
 COPY --from=builder /app/templates ./templates
 
-
 # Expose the port the application will run on
 EXPOSE 8080
 
 # Command to run the application
 CMD ["./main"]
+
